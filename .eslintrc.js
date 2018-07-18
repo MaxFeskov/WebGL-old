@@ -22,20 +22,8 @@ module.exports = {
     'import/no-unresolved': 0,
     'import/extensions': 0,
     'no-param-reassign': 0,
-    'no-mixed-operators': [
-      1,
-      {
-        groups: [
-          ['+', '-', '*', '/', '%', '**'],
-          ['&', '|', '^', '~', '<<', '>>', '>>>'],
-          ['==', '!=', '===', '!==', '>', '>=', '<', '<='],
-          ['&&', '||'],
-          ['in', 'instanceof'],
-        ],
-        allowSamePrecedence: true,
-      },
-    ],
     'no-mixed-operators': 0,
+    'array-element-newline': 0,
     'no-mixed-operators/no-mixed-operators': 1,
     'import/no-extraneous-dependencies': [
       'error',
