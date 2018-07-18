@@ -1,12 +1,14 @@
 import mat4Create from './gl-mat4/create';
 import mat4Perspective from './gl-mat4/perspective';
 import mat4Translate from './gl-mat4/translate';
+import mat4Rotate from './gl-mat4/rotate';
+
+let squareRotation = 0.0;
 
 main();
 
 function main() {
   const canvas = document.querySelector('#glCanvas');
-
   const gl = canvas.getContext('webgl');
 
   if (gl === null) {
@@ -55,7 +57,18 @@ function main() {
 
   const buffers = initBuffers(gl);
 
-  drawScene(gl, programInfo, buffers);
+  let then = 0;
+
+  function render(now) {
+    now *= 0.001;
+    const deltaTime = now - then;
+    then = now;
+
+    drawScene(gl, programInfo, buffers, deltaTime);
+
+    requestAnimationFrame(render);
+  }
+  requestAnimationFrame(render);
 }
 
 function initShaderProgram(gl, vsSource, fsSource) {
@@ -109,7 +122,7 @@ function initBuffers(gl) {
   };
 }
 
-function drawScene(gl, programInfo, buffers) {
+function drawScene(gl, programInfo, buffers, deltaTime) {
   gl.clearColor(0.0, 0.0, 0.0, 1.0);
   gl.clearDepth(1.0);
   gl.enable(gl.DEPTH_TEST);
@@ -122,12 +135,14 @@ function drawScene(gl, programInfo, buffers) {
   const zNear = 0.1;
   const zFar = 100.0;
   const projectionMatrix = mat4Create();
+  squareRotation += deltaTime;
 
   mat4Perspective(projectionMatrix, fiedOfView, aspect, zNear, zFar);
 
   const modelViewMatrix = mat4Create();
 
   mat4Translate(modelViewMatrix, modelViewMatrix, [-0.0, 0.0, -6.0]);
+  mat4Rotate(modelViewMatrix, modelViewMatrix, squareRotation, [0, 0, 1]);
 
   {
     const numComponents = 2;
